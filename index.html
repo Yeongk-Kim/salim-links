@@ -46,6 +46,20 @@
   .notice { margin-top:32px; text-align:center; color:var(--sub); font-size:11.5px; line-height:1.7; }
   .brand { margin-top:14px; text-align:center; color:var(--sub); opacity:.65;
             font-size:11px; font-weight:700; letter-spacing:1.5px; }
+  .finder { margin-top:22px; display:flex; align-items:center; gap:10px;
+             background:var(--card); border:1.5px solid var(--line); border-radius:99px;
+             padding:11px 18px; box-shadow:var(--shadow); }
+  .finder:focus-within { border-color:var(--accent1); }
+  .finder-icon { font-size:16px; }
+  .finder input { flex:1; border:0; outline:0; background:transparent; color:var(--ink);
+                   font-size:16px; font-weight:600; font-family:inherit; min-width:0; }
+  .finder input::placeholder { color:var(--sub); font-weight:400; }
+  .finder input::-webkit-outer-spin-button, .finder input::-webkit-inner-spin-button
+    { -webkit-appearance:none; margin:0; }
+  #지우기 { border:0; background:var(--line); color:var(--sub); width:24px; height:24px;
+           border-radius:50%; font-size:11px; cursor:pointer; display:none;
+           align-items:center; justify-content:center; }
+  .none { margin-top:22px; text-align:center; color:var(--sub); font-size:14px; }
 </style>
 </head>
 <body>
@@ -53,22 +67,48 @@
     <div class="avatar">&#127968;</div>
     <h1>살림연구소</h1>
     <p class="intro">영상에서 소개한 살림템을 번호 순서대로 모았습니다.</p>
+    <div class="finder">
+      <span class="finder-icon">&#128269;</span>
+      <input id="찾기" type="number" inputmode="numeric" min="1"
+             placeholder="영상에서 본 번호를 입력하세요" aria-label="번호로 찾기">
+      <button id="지우기" type="button" aria-label="지우기">&#10005;</button>
+    </div>
+    <p id="없음" class="none" hidden>그 번호의 제품이 아직 없어요</p>
     <div class="list">
-      <a class="btn" href="https://link.coupang.com/a/gcweY2WkQm" target="_blank" rel="noopener sponsored"><img class="thumb" src="img/13.jpg" alt="" loading="lazy"><span class="num">13</span><span class="name">사각 샤워기 헤드</span><span class="new">NEW</span><span class="arrow">&#8250;</span></a>
-      <a class="btn" href="https://link.coupang.com/a/gcxkf9PYUS" target="_blank" rel="noopener sponsored"><img class="thumb" src="img/12.jpg" alt="" loading="lazy"><span class="num">12</span><span class="name">LED 플라잉볼</span><span class="arrow">&#8250;</span></a>
-      <a class="btn" href="https://link.coupang.com/a/ga2HHxxOJo" target="_blank" rel="noopener sponsored"><img class="thumb" src="img/11.jpg" alt="" loading="lazy"><span class="num">11</span><span class="name">접이식 유리창 스퀴지</span><span class="arrow">&#8250;</span></a>
-      <a class="btn" href="https://link.coupang.com/a/ga2HzzVPeS" target="_blank" rel="noopener sponsored"><img class="thumb" src="img/10.jpg" alt="" loading="lazy"><span class="num">10</span><span class="name">벽걸이 모자 정리대</span><span class="arrow">&#8250;</span></a>
-      <a class="btn" href="https://link.coupang.com/a/ga2Hr374M0" target="_blank" rel="noopener sponsored"><img class="thumb" src="img/9.jpg" alt="" loading="lazy"><span class="num">9</span><span class="name">LED 조명 실링팬</span><span class="arrow">&#8250;</span></a>
-      <a class="btn" href="https://link.coupang.com/a/gcweXceFJQ" target="_blank" rel="noopener sponsored"><img class="thumb" src="img/7.jpg" alt="" loading="lazy"><span class="num">7</span><span class="name">자동 사과 껍질깎이 기계</span><span class="arrow">&#8250;</span></a>
-      <a class="btn" href="https://link.coupang.com/a/ga2c5qJOHA" target="_blank" rel="noopener sponsored"><img class="thumb" src="img/6.jpg" alt="" loading="lazy"><span class="num">6</span><span class="name">다용도 만돌린 채칼</span><span class="arrow">&#8250;</span></a>
-      <a class="btn" href="https://link.coupang.com/a/gcxkfsYyg8" target="_blank" rel="noopener sponsored"><img class="thumb" src="img/5.jpg" alt="" loading="lazy"><span class="num">5</span><span class="name">회전형 멀티탭</span><span class="arrow">&#8250;</span></a>
-      <a class="btn" href="https://link.coupang.com/a/gaOEZvqbTM" target="_blank" rel="noopener sponsored"><img class="thumb" src="img/4.jpg" alt="" loading="lazy"><span class="num">4</span><span class="name">벽걸이 랩호일 거치대</span><span class="arrow">&#8250;</span></a>
-      <a class="btn" href="https://link.coupang.com/a/gcc3aJqEeG" target="_blank" rel="noopener sponsored"><img class="thumb" src="img/3.jpg" alt="" loading="lazy"><span class="num">3</span><span class="name">매립형 무선충전기</span><span class="arrow">&#8250;</span></a>
-      <a class="btn" href="https://link.coupang.com/a/gcc22QhA7M" target="_blank" rel="noopener sponsored"><img class="thumb" src="img/2.jpg" alt="" loading="lazy"><span class="num">2</span><span class="name">전동 과일 껍질깎이</span><span class="arrow">&#8250;</span></a>
-      <a class="btn" href="https://link.coupang.com/a/gcc2UPPaCW" target="_blank" rel="noopener sponsored"><img class="thumb" src="img/1.jpg" alt="" loading="lazy"><span class="num">1</span><span class="name">미니 충전식 실링기</span><span class="arrow">&#8250;</span></a>
+      <a class="btn" data-num="13" href="https://link.coupang.com/a/gcweY2WkQm" target="_blank" rel="noopener sponsored"><img class="thumb" src="img/13.jpg" alt="" loading="lazy"><span class="num">13</span><span class="name">사각 샤워기 헤드</span><span class="new">NEW</span><span class="arrow">&#8250;</span></a>
+      <a class="btn" data-num="12" href="https://link.coupang.com/a/gcxkf9PYUS" target="_blank" rel="noopener sponsored"><img class="thumb" src="img/12.jpg" alt="" loading="lazy"><span class="num">12</span><span class="name">LED 플라잉볼</span><span class="arrow">&#8250;</span></a>
+      <a class="btn" data-num="11" href="https://link.coupang.com/a/ga2HHxxOJo" target="_blank" rel="noopener sponsored"><img class="thumb" src="img/11.jpg" alt="" loading="lazy"><span class="num">11</span><span class="name">접이식 유리창 스퀴지</span><span class="arrow">&#8250;</span></a>
+      <a class="btn" data-num="10" href="https://link.coupang.com/a/ga2HzzVPeS" target="_blank" rel="noopener sponsored"><img class="thumb" src="img/10.jpg" alt="" loading="lazy"><span class="num">10</span><span class="name">벽걸이 모자 정리대</span><span class="arrow">&#8250;</span></a>
+      <a class="btn" data-num="9" href="https://link.coupang.com/a/ga2Hr374M0" target="_blank" rel="noopener sponsored"><img class="thumb" src="img/9.jpg" alt="" loading="lazy"><span class="num">9</span><span class="name">LED 조명 실링팬</span><span class="arrow">&#8250;</span></a>
+      <a class="btn" data-num="7" href="https://link.coupang.com/a/gcweXceFJQ" target="_blank" rel="noopener sponsored"><img class="thumb" src="img/7.jpg" alt="" loading="lazy"><span class="num">7</span><span class="name">자동 사과 껍질깎이 기계</span><span class="arrow">&#8250;</span></a>
+      <a class="btn" data-num="6" href="https://link.coupang.com/a/ga2c5qJOHA" target="_blank" rel="noopener sponsored"><img class="thumb" src="img/6.jpg" alt="" loading="lazy"><span class="num">6</span><span class="name">다용도 만돌린 채칼</span><span class="arrow">&#8250;</span></a>
+      <a class="btn" data-num="5" href="https://link.coupang.com/a/gcxkfsYyg8" target="_blank" rel="noopener sponsored"><img class="thumb" src="img/5.jpg" alt="" loading="lazy"><span class="num">5</span><span class="name">회전형 멀티탭</span><span class="arrow">&#8250;</span></a>
+      <a class="btn" data-num="4" href="https://link.coupang.com/a/gaOEZvqbTM" target="_blank" rel="noopener sponsored"><img class="thumb" src="img/4.jpg" alt="" loading="lazy"><span class="num">4</span><span class="name">벽걸이 랩호일 거치대</span><span class="arrow">&#8250;</span></a>
+      <a class="btn" data-num="3" href="https://link.coupang.com/a/gcc3aJqEeG" target="_blank" rel="noopener sponsored"><img class="thumb" src="img/3.jpg" alt="" loading="lazy"><span class="num">3</span><span class="name">매립형 무선충전기</span><span class="arrow">&#8250;</span></a>
+      <a class="btn" data-num="2" href="https://link.coupang.com/a/gcc22QhA7M" target="_blank" rel="noopener sponsored"><img class="thumb" src="img/2.jpg" alt="" loading="lazy"><span class="num">2</span><span class="name">전동 과일 껍질깎이</span><span class="arrow">&#8250;</span></a>
+      <a class="btn" data-num="1" href="https://link.coupang.com/a/gcc2UPPaCW" target="_blank" rel="noopener sponsored"><img class="thumb" src="img/1.jpg" alt="" loading="lazy"><span class="num">1</span><span class="name">미니 충전식 실링기</span><span class="arrow">&#8250;</span></a>
     </div>
     <p class="notice">쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
     <p class="brand">LinkRack</p>
   </div>
+<script>
+  var 입력 = document.getElementById('찾기');
+  var 엑스 = document.getElementById('지우기');
+  var 없음 = document.getElementById('없음');
+  var 칸들 = Array.prototype.slice.call(document.querySelectorAll('.btn'));
+  function 거르기() {
+    var v = 입력.value.trim();
+    엑스.style.display = v ? 'flex' : 'none';
+    var 보인다 = 0;
+    칸들.forEach(function (b) {
+      var 맞다 = !v || b.getAttribute('data-num') === v;
+      b.style.display = 맞다 ? '' : 'none';
+      if (맞다) 보인다++;
+    });
+    없음.hidden = !(v && 보인다 === 0);
+  }
+  입력.addEventListener('input', 거르기);
+  엑스.addEventListener('click', function () { 입력.value = ''; 거르기(); 입력.focus(); });
+</script>
 </body>
 </html>
