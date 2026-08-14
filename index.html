@@ -56,9 +56,10 @@
   .finder input::placeholder { color:var(--sub); font-weight:400; }
   .finder input::-webkit-outer-spin-button, .finder input::-webkit-inner-spin-button
     { -webkit-appearance:none; margin:0; }
-  #지우기 { border:0; background:var(--line); color:var(--sub); width:24px; height:24px;
-           border-radius:50%; font-size:11px; cursor:pointer; display:none;
-           align-items:center; justify-content:center; }
+  #이동 { border:0; background:linear-gradient(135deg,var(--accent1),var(--accent2));
+          color:#fff; font-size:14px; font-weight:700; font-family:inherit;
+          border-radius:99px; padding:8px 18px; cursor:pointer; flex:0 0 auto; }
+  #이동:active { transform:scale(0.95); }
   .none { margin-top:22px; text-align:center; color:var(--sub); font-size:14px; }
 </style>
 </head>
@@ -70,8 +71,8 @@
     <div class="finder">
       <span class="finder-icon">&#128269;</span>
       <input id="찾기" type="number" inputmode="numeric" min="1"
-             placeholder="영상에서 본 번호를 입력하세요" aria-label="번호로 찾기">
-      <button id="지우기" type="button" aria-label="지우기">&#10005;</button>
+             placeholder="영상에서 본 번호 입력" aria-label="번호로 찾기">
+      <button id="이동" type="button">이동</button>
     </div>
     <p id="없음" class="none" hidden>그 번호의 제품이 아직 없어요</p>
     <div class="list">
@@ -93,22 +94,31 @@
   </div>
 <script>
   var 입력 = document.getElementById('찾기');
-  var 엑스 = document.getElementById('지우기');
+  var 가기 = document.getElementById('이동');
   var 없음 = document.getElementById('없음');
   var 칸들 = Array.prototype.slice.call(document.querySelectorAll('.btn'));
-  function 거르기() {
-    var v = 입력.value.trim();
-    엑스.style.display = v ? 'flex' : 'none';
-    var 보인다 = 0;
-    칸들.forEach(function (b) {
-      var 맞다 = !v || b.getAttribute('data-num') === v;
-      b.style.display = 맞다 ? '' : 'none';
-      if (맞다) 보인다++;
-    });
-    없음.hidden = !(v && 보인다 === 0);
+  function 찾기(v) {
+    for (var i = 0; i < 칸들.length; i++)
+      if (칸들[i].getAttribute('data-num') === v) return 칸들[i];
+    return null;
   }
-  입력.addEventListener('input', 거르기);
-  엑스.addEventListener('click', function () { 입력.value = ''; 거르기(); 입력.focus(); });
+  function 미리보기() {
+    var v = 입력.value.trim();
+    칸들.forEach(function (b) {
+      b.style.display = (!v || b.getAttribute('data-num') === v) ? '' : 'none';
+    });
+    없음.hidden = !(v && !찾기(v));
+  }
+  function 이동() {
+    var v = 입력.value.trim();
+    if (!v) return;
+    var 칸 = 찾기(v);
+    if (칸) 칸.click();          // 버튼과 같은 새 탭·후원 표시 규칙으로 연다
+    else 없음.hidden = false;
+  }
+  입력.addEventListener('input', 미리보기);
+  입력.addEventListener('keydown', function (e) { if (e.key === 'Enter') 이동(); });
+  가기.addEventListener('click', 이동);
 </script>
 </body>
 </html>
